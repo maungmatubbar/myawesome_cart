@@ -1,8 +1,22 @@
 from django.contrib import admin
-
+from django.utils.html import format_html
 # Register your models here.
 from .models import Product
-admin.site.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('product_name','image', 'price', 'pub_date')  #
+    search_fields = ('product_name',)  # Search bar for the product name
+    list_filter = ('pub_date', 'price')  # Filters for date or price
+    ordering = ('-pub_date',)  # Order by latest created first
+    list_per_page = 10  # Number of items to show per pag
+
+    def image_display(self, obj):
+        if obj.image:
+            return format_html('<img src="{obj.image.url}" width="50" height="50" />', obj.image.url)
+        return "No Image"
+
+    image_display.short_description = "Product Image"  # Column title
+admin.site.register(Product, ProductAdmin)
+
 
 # @admin.register(Product)
 # class ProductAdmin(admin.ModelAdmin):
