@@ -2,28 +2,34 @@
 {% block title %} Home {% endblock %}
 {% block body %}
 {% load static %}
-{% for product, range , nSlides, title in allProds %}
-<h2>{{ title.product_title }}</h2>
+{% for product, range , nSlides  in allProds %}
+<h2>{{ product.0.category }}</h2>
 <div id="carouselExampleIndicators{{ forloop.counter }}" class="carousel slide my-5">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleIndicators{{ forloop.counter }}" data-bs-slide-to="0" class="active"
-                aria-current="true" aria-label="Slide 1"></button>
-        {% for i in range %}
-        <button type="button" data-bs-target="#carouselExampleIndicators{{ forloop.parentloop.counter }}" data-bs-slide-to="{{ i }}"
-                aria-label="Slide {{ i|add:1 }}"></button>
-        {% endfor %}
-    </div>
+<!--    <div class="carousel-indicators">-->
+<!--        <button type="button" data-bs-target="#carouselExampleIndicators{{ forloop.counter }}" data-bs-slide-to="0" class="active"-->
+<!--                aria-current="true" aria-label="Slide 1"></button>-->
+<!--        {% for i in range %}-->
+<!--        <button type="button" data-bs-target="#carouselExampleIndicators{{ forloop.parentloop.counter }}" data-bs-slide-to="{{ i }}"-->
+<!--                aria-label="Slide {{ i|add:1 }}"></button>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
     <div class="carousel-inner">
         <div class="carousel-item active">
             <div class="row">
                 {% for i in product %}
+
                 <div class="col-md-3">
+
                     <div class="card" style="width: 18rem;">
                         <img src="/media/{{ i.image }}" class="card-img-top" height="300" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">{{ i.product_name|slice:"20" }}</h5>
                             <p class="card-text">{{ i.desc|truncatechars:20 }}</p>
-                            <a href="#" class="btn btn-primary">ADD TO CART</a>
+                            <div class="text-center">
+                                <button id="pr{{ i.id }}" class="btn btn-primary add_to_cart">ADD TO CART</button>
+                                <a href="/shop/product-view/{{i.id}}" class="btn btn-secondary add_to_cart">QUICK VIEW</a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -33,17 +39,58 @@
                 {%endfor%}
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators{{ forloop.counter }}"
+        <div class="carousel-prev-next position-relative">
+            <button class="carousel-prev position-absolute start-0 bg-transparent border-0" style="top: 180px" type="button" data-bs-target="#carouselExampleIndicators{{ forloop.counter }}"
                 data-bs-slide="prev">
             <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators{{ forloop.counter }}"
+        <button class="carousel-next position-absolute end-0 bg-transparent border-0" style="top: 180px" type="button" data-bs-target="#carouselExampleIndicators{{ forloop.counter }}"
                 data-bs-slide="next">
             <span class="carousel-control-next-icon bg-dark" aria-hidden="true"></span>
             <span class="visually-hidden bg-white">Next</span>
         </button>
+        </div>
     </div>
 </div>
 {% endfor %}
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function(){
+        if(localStorage.getItem('cart') == null){
+            var cart = {};
+
+        }
+        else
+        {
+            cart = JSON.parse(localStorage.getItem('cart'));
+             document.getElementById('cart').innerHTML = Object.keys(cart).length;
+
+        }
+        $('.add_to_cart').click(function(){
+            var idstr = this.id.toString();
+            console.log(idstr);
+            if(cart[idstr] != undefined){
+                cart[idstr] = cart[idstr] + 1;
+            }
+            else
+            {
+                cart[idstr] = 1;
+            }
+            console.log(cart)
+            localStorage.setItem('cart',JSON.stringify(cart));
+
+            document.getElementById('cart').innerHTML = Object.keys(cart).length;
+        });
+    });
+    const popoverElement = document.getElementById("popover_cart");
+    const popover = new bootstrap.Popover(popoverElement);
+
+    popoverElement.addEventListener('show.bs.popover', () => {
+        popover._config.content = "<h5>Cart for your items in my shopping cart</h5>";
+    });
+
+
+</script>
 {% endblock %}
