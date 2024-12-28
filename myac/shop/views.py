@@ -55,7 +55,7 @@ def product_view(request,id):
         'product': product[0]
     })
 def checkout(request):
-    return render(request, 'shop/about.html')
+    return render(request, 'shop/checkout.html')
 def cart(request):
     return render(request, 'shop/cart.html')
 def search(request):
