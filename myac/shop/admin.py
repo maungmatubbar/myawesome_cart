@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.utils.html import format_html
+
+from .models import Product, Contact, Orders
+
+
 # Register your models here.
-from .models import Product, Contact
 #diplay admin panel
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('product_name','image', 'price', 'pub_date')  #
@@ -18,6 +21,7 @@ class ProductAdmin(admin.ModelAdmin):
     image_display.short_description = "Product Image"  # Column title
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Contact)
+admin.site.register(Orders)
 
 # @admin.register(Product)
 # class ProductAdmin(admin.ModelAdmin):

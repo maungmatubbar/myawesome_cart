@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.db.models import QuerySet
-from .models import Product, Contact
+from django.template.context_processors import request
+
+from .models import Product, Contact, Orders
 from math import ceil
 
 # Create your views here.
@@ -55,6 +57,19 @@ def product_view(request,id):
         'product': product[0]
     })
 def checkout(request):
+    if request.method == 'POST':
+        items_json = request.POST.get('itemsJson','')
+        name = request.POST.get('name', '')
+        email = request.POST.get('email','')
+        address = request.POST.get('address','')
+        phone = request.POST.get('phone','')
+        city = request.POST.get('city','')
+        state = request.POST.get('state','')
+        zip_code = request.POST.get('zip_code','')
+        order = Orders(items_json=items_json, name=name, email=email, phone=phone, address=address, city=city, state=state, zip_code=zip_code)
+        order.save()
+        thank = True
+        return render(request, 'shop/checkout.html', {'thank':thank, 'id':order.order_id})
     return render(request, 'shop/checkout.html')
 def cart(request):
     return render(request, 'shop/cart.html')
