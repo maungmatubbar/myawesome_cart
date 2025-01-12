@@ -66,7 +66,9 @@ $(document).ready(function(){
             }
             else
             {
-                mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">Sorry </li>`;
+                mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    Sorry, We are not able to fetch this order id and email. Make sure to type correct spelling of your email
+                    </li>`;
                 $('#items').append(mystr);
             }
         })
