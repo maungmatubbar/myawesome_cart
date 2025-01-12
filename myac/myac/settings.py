@@ -58,7 +58,7 @@ ROOT_URLCONF = 'myac.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['myac/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
